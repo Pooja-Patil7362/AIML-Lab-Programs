@@ -1,0 +1,61 @@
+print("Name: Pooja")
+print("USN: 24BECS163")
+
+from queue import PriorityQueue
+
+def best_first_search(graph, start, target, heuristics):
+    visited = set()
+    pq = PriorityQueue()
+
+    # (heuristic_value, current_node, path)
+    pq.put((heuristics[start], start, [start]))
+    visited.add(start)
+
+    while not pq.empty():
+        h, node, path = pq.get()
+
+        # Goal reached
+        if node == target:
+            return path, h
+
+        # Visit neighbors
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                pq.put((heuristics[neighbor], neighbor, path + [neighbor]))
+
+    return None, None
+
+
+# Graph Representation
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+
+# Heuristic Values
+heuristics = {
+    'A': 6,
+    'B': 4,
+    'C': 2,
+    'D': 3,
+    'E': 1,
+    'F': 0
+}
+
+# Start and Goal
+start = 'A'
+target = 'F'
+
+# Call Best First Search
+path, heuristic = best_first_search(graph, start, target, heuristics)
+
+# Display Result
+if path:
+    print("Path found by Best-first Search:", path, "with Target Heuristic:", heuristic)
+else:
+    print("No path found.")
